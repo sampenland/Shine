@@ -8,6 +8,12 @@ namespace Shine.Engine
 {
     class Log
     {
+
+        public static void PrintDirLocation()
+        {
+            Print("Location: " + System.IO.Directory.GetCurrentDirectory());
+        }
+
         public static void Print(string text)
         {
             Console.WriteLine(text);

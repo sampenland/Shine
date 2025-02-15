@@ -18,6 +18,20 @@ namespace Shine.Engine
             endKey = quitKey;
         }
 
+        public void Draw(Sprite sprite)
+        {
+            if(mainWindow == null)
+            {
+                Log.Error("Cannot draw window. Window is null");
+                return;
+            }
+
+            if (sprite != null && sprite.GetDrawable() != null)
+            {
+                mainWindow.Draw(sprite.GetDrawable());
+            }
+        }
+
         private void WindowClosed(object? sender, EventArgs e)
         {
             Running = false;

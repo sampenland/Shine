@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace Shine.Engine
 {
-    class Sprite
+    public abstract class Sprite
     {
         private Texture texture;
+        private SFML.Graphics.Sprite sprite;
+        public string Name;
         private int _x;
         private int _y;
 
@@ -44,6 +46,7 @@ namespace Shine.Engine
             try
             {
                 texture = new Texture(textureAsset, new IntRect(0, 0, texWidth, texHeight));
+                sprite = new SFML.Graphics.Sprite(texture);
             }
             catch(Exception e)
             {
@@ -52,14 +55,28 @@ namespace Shine.Engine
             }
         }
 
+        public void SetPosition(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+
+        public SFML.Graphics.Sprite GetDrawable()
+        {
+            return sprite;
+        }
+
         public void Update()
         {
-            
+            sprite.Position = new SFML.System.Vector2f(X, Y);
         }
 
         public void Render()
         {
-
+            if (Game.control != null && Game.control.gameWindow != null)
+            {
+                Game.control.gameWindow.Draw(this);
+            }
         }
     }
 }

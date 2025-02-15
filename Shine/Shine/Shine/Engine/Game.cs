@@ -4,8 +4,10 @@ namespace Shine.Engine
 {
     class Game
     {
+        public static Game? control;
+
         // IMPORTANT
-        public static Window ?gameWindow = null;
+        public Window ?gameWindow = null;
         public SceneManager sceneManager;
 
         // Secondary
@@ -14,6 +16,11 @@ namespace Shine.Engine
 
         public Game(uint windowWidth, uint windowHeight, string gameName, Keyboard.Key endKey)
         {
+            if (control == null)
+            {
+                control = this;
+            }
+
             gameWindow = new Window(windowWidth, windowHeight, gameName, endKey);
             sceneManager = new SceneManager();
         }
@@ -26,7 +33,7 @@ namespace Shine.Engine
                 return;
             }
 
-            gameWindow.Init(SFML.Graphics.Color.Black);
+            gameWindow.Init(SFML.Graphics.Color.Blue);
         }
 
         public void Start(Scene startScene)
@@ -36,6 +43,16 @@ namespace Shine.Engine
             sceneManager.ChangeScene(startScene);
             IsRunning = true;
             Update();
+        }
+
+        public void AddScene(Scene scene)
+        {
+            sceneManager.AddScene(scene);
+        }
+
+        public void RemoveScene(Scene scene)
+        {
+            sceneManager.RemoveScene(scene);
         }
 
         private void Update()

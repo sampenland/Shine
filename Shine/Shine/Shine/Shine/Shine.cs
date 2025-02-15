@@ -1,11 +1,28 @@
 ﻿using Shine.Engine;
+using Shine.Shine.Scenes;
 
-// Create the game
-Game shine = new Game(1280, 720, "Shine v.1.0.0", SFML.Window.Keyboard.Key.Escape);
+new ShineGame();
 
-// Create all the possible scenes
-Scene menu = new Scene("MainMenu");
-shine.sceneManager.AddScene(menu);
+class ShineGame
+{
+    public static ShineGame ?control;
 
-// Start the game
-shine.Start(menu);
+    public ShineGame()
+    {
+        // Create shine singleton
+        if (control == null)
+        {
+            control = this;
+
+            // Create shine game
+            Game game = new Game(1280, 720, "Shine v.1.0.0", SFML.Window.Keyboard.Key.Escape);
+            
+            // Create all the possible scenes and add them to game
+            MainMenu menu = new MainMenu("MainMenu");
+            game.AddScene(menu);
+
+            // Start the game
+            game.Start(menu);
+        }
+    }
+}

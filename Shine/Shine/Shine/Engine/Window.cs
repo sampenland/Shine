@@ -8,6 +8,7 @@ namespace Shine.Engine
         static RenderWindow? mainWindow;
         static Keyboard.Key endKey = Keyboard.Key.Escape;
         public bool Running = false;
+        private Color backgroundColor = Color.Black;
         
         public Window(uint width, uint height, string name, Keyboard.Key quitKey = Keyboard.Key.Escape)
         {
@@ -22,7 +23,7 @@ namespace Shine.Engine
             Running = false;
         }
 
-        public void Init(uint fps = 60)
+        public void Init(Color background, uint fps = 60)
         {
             Running = true;
             if (mainWindow == null)
@@ -32,7 +33,7 @@ namespace Shine.Engine
             }
 
             mainWindow.SetFramerateLimit(fps);
-            Log.Print("Shine Game :: Started");
+            backgroundColor = background;
         }
 
         public void WindowKeyPress(object ?sender, KeyEventArgs e)
@@ -49,7 +50,16 @@ namespace Shine.Engine
                 Running = false;
                 return;
             }
+
             mainWindow.DispatchEvents();
+        }
+
+        public void Render()
+        {
+            if (mainWindow == null) return;
+
+            mainWindow.Clear(backgroundColor);
+            mainWindow.Display();
         }
 
         public void End()

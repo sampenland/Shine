@@ -25,6 +25,11 @@ namespace Shine.Engine
             }
         }
 
+        public List<List<Sprite>> GetDrawLayers()
+        {
+            return DrawPriorityLayers;
+        }
+
         /*
          * Layer :: Higher the value, lower the priority
          */
@@ -66,17 +71,6 @@ namespace Shine.Engine
                 foreach (Sprite sprite in DrawPriorityLayers[layer])
                 {
                     sprite.Update();
-                }
-            }
-        }
-
-        public void Render()
-        {
-            for(int layer = 0; layer < DRAW_LAYERS; layer++)
-            {
-                foreach(Sprite sprite in DrawPriorityLayers[layer])
-                {
-                    sprite.Render();
                 }
             }
         }

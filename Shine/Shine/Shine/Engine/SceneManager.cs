@@ -9,7 +9,7 @@ namespace Shine.Engine
     class SceneManager
     {
         List<Scene> scenes;
-        Scene currentScene;
+        public Scene CurrentScene;
 
         public SceneManager()
         {
@@ -18,7 +18,7 @@ namespace Shine.Engine
 
         public void ChangeScene(Scene scene)
         {
-            currentScene = scene;
+            CurrentScene = scene;
             Log.Print("Started scene: " + scene.Name);
         }
 
@@ -36,15 +36,7 @@ namespace Shine.Engine
         {
             foreach(Scene scene in scenes)
             {
-                if (currentScene == scene) scene.Update();
-            }
-        }
-
-        public void Render()
-        {
-            foreach (Scene scene in scenes)
-            {
-                if (currentScene == scene) scene.Render();
+                if (CurrentScene == scene) scene.Update();
             }
         }
 

@@ -7,9 +7,12 @@ namespace Shine.Shine.Scenes
     {
         public MainMenu(string name) : base(name)
         {
-            Tree tree = new Tree();
-            AddSprite(tree, 0);
-            tree.SetPosition(100, 100);
+            for(int i = 0; i < 10; i++)
+            {
+                Tree tree = new Tree();
+                AddSprite(tree, 0);
+                tree.SetPosition(i * 50, 100);
+            }
         }
     }
 }

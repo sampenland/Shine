@@ -73,7 +73,25 @@ namespace Shine.Engine
             if (mainWindow == null) return;
 
             mainWindow.Clear(backgroundColor);
+
+            RenderCurrentScene();
+
             mainWindow.Display();
+        }
+
+        private void RenderCurrentScene()
+        {
+            if (Game.control != null)
+            {
+                List<List<Sprite>> layers = Game.control.sceneManager.CurrentScene.GetDrawLayers();
+                for (int layer = 0; layer < layers.Count; layer++)
+                {
+                    foreach (Sprite sprite in layers[layer])
+                    {
+                        mainWindow.Draw(sprite.GetDrawable());
+                    }
+                }
+            }
         }
 
         public void End()

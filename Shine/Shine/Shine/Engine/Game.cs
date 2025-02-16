@@ -33,7 +33,7 @@ namespace Shine.Engine
                 return;
             }
 
-            gameWindow.Init(SFML.Graphics.Color.Blue);
+            gameWindow.Init(SFML.Graphics.Color.Black);
         }
 
         public void Start(Scene startScene)
@@ -73,7 +73,6 @@ namespace Shine.Engine
                 sceneManager.Update();
 
                 // Update display
-                sceneManager.Render();
                 gameWindow.Render();
             }
 

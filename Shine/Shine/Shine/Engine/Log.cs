@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shine.Engine
+namespace CrossEngine.Engine
 {
     class Log
     {
 
         public static void PrintDirLocation()
         {
-            Print("Location: " + System.IO.Directory.GetCurrentDirectory());
+            Print("Location: " + Directory.GetCurrentDirectory());
         }
 
         public static void Print(string text)

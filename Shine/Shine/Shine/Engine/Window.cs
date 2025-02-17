@@ -1,7 +1,8 @@
 ﻿using SFML.Graphics;
 using SFML.Window;
+using static SFML.Graphics.Text;
 
-namespace Shine.Engine
+namespace CrossEngine.Engine
 {
     class Window
     {
@@ -18,10 +19,22 @@ namespace Shine.Engine
             Width = (int)width;
             Height = (int)height;
 
-            mainWindow = new RenderWindow(new SFML.Window.VideoMode(width, height), name);
+            mainWindow = new RenderWindow(new VideoMode(width, height), name);
             mainWindow.KeyPressed += WindowKeyPress;
             mainWindow.Closed += WindowClosed;
             endKey = quitKey;
+        }
+
+        public void SetView(View view)
+        {
+            if(mainWindow != null)
+            {
+                mainWindow.SetView(view);
+            }
+            else
+            {
+                throw new ArgumentNullException();
+            }
         }
 
         public void Draw(Sprite sprite)
@@ -29,12 +42,24 @@ namespace Shine.Engine
             if(mainWindow == null)
             {
                 Log.Error("Cannot draw window. Window is null");
-                return;
+                throw new ArgumentNullException();
             }
 
             if (sprite != null && sprite.GetDrawable() != null)
             {
-                mainWindow.Draw(sprite.GetDrawable());
+                
+                for(int i = 0; i < sprite.GetViews().Count; i++)
+                {
+                    KeyValuePair<View, XYf> viewAndPos = sprite.GetViews().ElementAt(i);
+                    if (Game.Control == null || Game.Control.gameWindow == null)
+                    {
+                        throw new ArgumentNullException();
+                    }
+
+                    Game.Control.gameWindow.SetView(viewAndPos.Key);
+                    sprite.SetRenderPosition(viewAndPos.Value.X, viewAndPos.Value.Y);
+                    mainWindow.Draw(sprite.GetDrawable());
+                }
             }
         }
 
@@ -68,7 +93,7 @@ namespace Shine.Engine
             {
                 Log.Error("Cannot update main screen - is null");
                 Running = false;
-                return;
+                throw new ArgumentNullException();
             }
 
             mainWindow.DispatchEvents();
@@ -87,22 +112,53 @@ namespace Shine.Engine
 
         private void RenderCurrentScene()
         {
-            if (Game.Control != null)
+            if (Game.Control == null || mainWindow == null)
             {
-                List<List<Sprite>> layers = Game.Control.GetSceneManager().CurrentScene.GetDrawLayers();
-                for (int layer = 0; layer < layers.Count; layer++)
+                throw new ArgumentNullException();
+            }
+
+            List<List<Sprite>> layers = Game.Control.GetSceneManager().CurrentScene.GetDrawLayers();
+            mainWindow.Draw(Game.Control.GetSceneManager().CurrentScene.GetTilemap());
+            for (int layer = 0; layer < layers.Count; layer++)
+            {
+                foreach (Sprite sprite in layers[layer])
                 {
-                    foreach (Sprite sprite in layers[layer])
-                    {
-                        if (mainWindow != null) mainWindow.Draw(sprite.GetDrawable());
-                    }
+                    mainWindow.Draw(sprite.GetDrawable());
                 }
             }
         }
+        public static XYf PixelToWorld(XYi pos)
+        {
+            return PixelToWorld(pos.X, pos.Y);
+        }
+        
+        public static XYf WorldToPixel(XYf pos)
+        {
+            return WorldToPixel(pos.X, pos.Y);
+        }
+        public static XYf PixelToWorld(int x, int y)
+        {
+            if (mainWindow == null)
+            {
+                throw new ArgumentNullException();
+            }
 
+            SFML.System.Vector2f world = mainWindow.MapPixelToCoords(new SFML.System.Vector2i(x, y));
+            return new XYf(world.X, world.Y);
+        }
+        public static XYf WorldToPixel(float x, float y)
+        {
+            if (mainWindow == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            SFML.System.Vector2i pixel = mainWindow.MapCoordsToPixel(new SFML.System.Vector2f(x, y));
+            return new XYf(pixel.X, pixel.Y);
+        }
         public void End()
         {
-            Log.Print("Shine Game :: Ended");
+            Log.Print("Window Closed");
         }
     }
 }

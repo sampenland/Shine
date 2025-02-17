@@ -1,6 +1,6 @@
 ﻿using SFML.Window;
 
-namespace Shine.Engine
+namespace CrossEngine.Engine
 {
     class Game
     {
@@ -56,7 +56,6 @@ namespace Shine.Engine
         {
             sceneManager.RemoveScene(scene);
         }
-
         private void Update()
         {
             if (gameWindow == null)

@@ -1,11 +1,11 @@
-﻿using Shine.Engine;
+﻿using CrossEngine.Engine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shine.Shine.Sprites.MainMenu
+namespace CrossEngine.Shine.Sprites.MainMenu
 {
     class Player : ArrowActor
     {

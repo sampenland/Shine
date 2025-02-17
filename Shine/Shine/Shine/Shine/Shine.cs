@@ -1,5 +1,5 @@
-﻿using Shine.Engine;
-using Shine.Shine.Scenes;
+﻿using CrossEngine.Engine;
+using CrossEngine.Shine.Scenes;
 
 new ShineGame();
 
@@ -18,7 +18,7 @@ class ShineGame
             Game game = new Game(1280, 720, "Shine v.1.0.0", SFML.Window.Keyboard.Key.Escape);
             
             // Create all the possible scenes and add them to game
-            MainMenu menu = new MainMenu("MainMenu");
+            Sandbox menu = new Sandbox("SandBox");
             game.AddScene(menu);
 
             // Start the game

@@ -1,21 +1,23 @@
 ﻿using SFML.Graphics;
+using SFML.Window;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shine.Engine
+namespace CrossEngine.Engine
 {
     public abstract class Sprite
     {
         private Texture ?texture;
         private SFML.Graphics.Sprite ?sprite;
+        private Dictionary<View, XYf> views;
         public string ?Name;
-        private int _x;
-        private int _y;
+        private float _x;
+        private float _y;
 
-        public int X
+        public float X
         {
             get
             {
@@ -28,7 +30,7 @@ namespace Shine.Engine
             }
         }
 
-        public int Y
+        public float Y
         {
             get
             {
@@ -47,19 +49,44 @@ namespace Shine.Engine
             {
                 texture = new Texture(textureAsset, new IntRect(0, 0, texWidth, texHeight));
                 sprite = new SFML.Graphics.Sprite(texture);
+                views = new Dictionary<View, XYf>();
             }
             catch(Exception e)
             {
-                Log.Error("Error loading texture: " + textureAsset);
+                Log.Error("Error creating sprite: " + textureAsset);
                 texture = null;
                 throw new ArgumentNullException();
             }
         }
 
-        public void SetPosition(int x, int y)
+        public void AddToView(View theView)
+        {
+            if (views.ContainsKey(theView)) return;
+            views.Add(theView, Window.WorldToPixel(X, Y));
+        }
+
+        public Dictionary<View, XYf> GetViews()
+        {
+            return views;
+        }
+
+        /*
+         * World Position
+         */
+        public void SetWorldPosition(float x, float y)
         {
             X = x;
             Y = y;
+        }
+
+        public void SetRenderPosition(float x, float y)
+        {
+            if (sprite == null)
+            {
+                return;
+            }
+
+            sprite.Position = new SFML.System.Vector2f(x, y);
         }
 
         public SFML.Graphics.Sprite GetDrawable()
@@ -70,8 +97,7 @@ namespace Shine.Engine
 
         public virtual void Update()
         {
-            if (sprite == null) throw new ArgumentNullException();
-            sprite.Position = new SFML.System.Vector2f(X, Y);
+
         }
 
         public void Render()

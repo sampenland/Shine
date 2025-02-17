@@ -4,15 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shine.Engine
+namespace CrossEngine.Engine
 {
     public abstract class Scene
     {
         const int DRAW_LAYERS = 10;
 
         public string Name;
-        protected List<Sprite> sprites;
-        protected List<List<Sprite>> DrawPriorityLayers;
+        protected List<Sprite> ?sprites;
+        protected List<List<Sprite>> ?DrawPriorityLayers;
+        private TileMap ?tilemap;
+        protected List<View>? views;
 
         public Scene(string name)
         {
@@ -25,9 +27,27 @@ namespace Shine.Engine
             }
         }
 
+        public void SetTilemap(string asset, XYi tileSize, int[] tiles, int width, int height)
+        {
+            tilemap = new TileMap(asset);
+            tilemap.Load(tileSize, tiles, width, height);
+        }
+
+        public void AddTilemapToView(View view)
+        {
+            if (tilemap == null) return;
+            tilemap.AddToView(view);
+        }
+
         public List<List<Sprite>> GetDrawLayers()
         {
+            if (DrawPriorityLayers == null) throw new ArgumentNullException();
             return DrawPriorityLayers;
+        }
+
+        public TileMap GetTilemap()
+        {
+            return tilemap;
         }
 
         /*

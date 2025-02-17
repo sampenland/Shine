@@ -4,16 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shine.Engine
+namespace CrossEngine.Engine
 {
     abstract class ArrowActor : Sprite
     {
-        private int speed = 1;
+        private float speed = 1f;
         private bool wasd = true;
+        private bool movementEnabled = true;
 
-        protected ArrowActor(int movementSpeed, string textureAsset, int texWidth, int texHeight) : base(textureAsset, texWidth, texHeight)
+        protected ArrowActor(float movementSpeed, string textureAsset, int texWidth, int texHeight) : 
+            base(textureAsset, texWidth, texHeight)
         {
             speed = movementSpeed;
+        }
+
+        public void EnableMovement()
+        {
+            movementEnabled = true;
+        }
+
+        public void DisableMovement()
+        {
+            movementEnabled = false;
         }
 
         public void DisableWASD()
@@ -30,7 +42,7 @@ namespace Shine.Engine
         {
             if (InputHandler.PressedKeys != null)
             {
-                if (InputHandler.PressedKeys[Keys.UpArrow] || (wasd && InputHandler.PressedKeys[Keys.W]))
+                if (InputHandler.PressedKeys[Keys.UpArrow] || wasd && InputHandler.PressedKeys[Keys.W])
                 {
                     Y -= speed;
                 }
@@ -38,7 +50,7 @@ namespace Shine.Engine
 
             if (InputHandler.PressedKeys != null)
             {
-                if (InputHandler.PressedKeys[Keys.DownArrow] || (wasd && InputHandler.PressedKeys[Keys.S]))
+                if (InputHandler.PressedKeys[Keys.DownArrow] || wasd && InputHandler.PressedKeys[Keys.S])
                 {
                     Y += speed;
                 }
@@ -46,7 +58,7 @@ namespace Shine.Engine
 
             if (InputHandler.PressedKeys != null)
             {
-                if (InputHandler.PressedKeys[Keys.RightArrow] || (wasd && InputHandler.PressedKeys[Keys.D]))
+                if (InputHandler.PressedKeys[Keys.RightArrow] || wasd && InputHandler.PressedKeys[Keys.D])
                 {
                     X += speed;
                 }
@@ -54,7 +66,7 @@ namespace Shine.Engine
 
             if (InputHandler.PressedKeys != null)
             {
-                if (InputHandler.PressedKeys[Keys.LeftArrow] || (wasd && InputHandler.PressedKeys[Keys.A]))
+                if (InputHandler.PressedKeys[Keys.LeftArrow] || wasd && InputHandler.PressedKeys[Keys.A])
                 {
                     X -= speed;
                 }

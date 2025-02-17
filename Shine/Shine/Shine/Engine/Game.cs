@@ -4,11 +4,12 @@ namespace Shine.Engine
 {
     class Game
     {
-        public static Game? control;
+        public static Game? Control;
 
         // IMPORTANT
         public Window ?gameWindow = null;
-        public SceneManager sceneManager;
+        private SceneManager sceneManager;
+        private InputHandler inputHandler;
 
         // Secondary
         public static float DeltaTime;
@@ -16,13 +17,14 @@ namespace Shine.Engine
 
         public Game(uint windowWidth, uint windowHeight, string gameName, Keyboard.Key endKey)
         {
-            if (control == null)
+            if (Control == null)
             {
-                control = this;
+                Control = this;
             }
 
             gameWindow = new Window(windowWidth, windowHeight, gameName, endKey);
             sceneManager = new SceneManager();
+            inputHandler = new InputHandler();
         }
 
         private void Init()
@@ -69,6 +71,7 @@ namespace Shine.Engine
                 if (!gameWindow.Running) break;
 
                 // Update inputs
+                inputHandler.Update();
                 gameWindow.Update();
                 sceneManager.Update();
 
@@ -82,6 +85,11 @@ namespace Shine.Engine
         public void End()
         {
             Log.Print("Cross Engine shutdown.");
+        }
+
+        public SceneManager GetSceneManager()
+        {
+            return sceneManager;
         }
 
     }

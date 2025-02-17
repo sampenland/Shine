@@ -8,11 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SFML.Net" Version="2.6.0" />
+    <Compile Remove="Shine\Assets\**" />
+    <EmbeddedResource Remove="Shine\Assets\**" />
+    <None Remove="Shine\Assets\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Shine\Assets\" />
+    <PackageReference Include="SFML.Net" Version="2.6.0" />
   </ItemGroup>
 
 </Project>

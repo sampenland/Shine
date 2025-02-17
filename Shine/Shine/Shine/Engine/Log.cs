@@ -19,6 +19,11 @@ namespace Shine.Engine
             Console.WriteLine(text);
         }
 
+        public static void Write(string text)
+        {
+            Print(text);
+        }
+
         public static void Error(string errText)
         {
             Console.WriteLine(errText);

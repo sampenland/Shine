@@ -9,9 +9,9 @@ namespace Shine.Engine
 {
     public abstract class Sprite
     {
-        private Texture texture;
-        private SFML.Graphics.Sprite sprite;
-        public string Name;
+        private Texture ?texture;
+        private SFML.Graphics.Sprite ?sprite;
+        public string ?Name;
         private int _x;
         private int _y;
 
@@ -52,6 +52,7 @@ namespace Shine.Engine
             {
                 Log.Error("Error loading texture: " + textureAsset);
                 texture = null;
+                throw new ArgumentNullException();
             }
         }
 
@@ -63,19 +64,21 @@ namespace Shine.Engine
 
         public SFML.Graphics.Sprite GetDrawable()
         {
+            if (sprite == null) throw new ArgumentNullException();
             return sprite;
         }
 
-        public void Update()
+        public virtual void Update()
         {
+            if (sprite == null) throw new ArgumentNullException();
             sprite.Position = new SFML.System.Vector2f(X, Y);
         }
 
         public void Render()
         {
-            if (Game.control != null && Game.control.gameWindow != null)
+            if (Game.Control != null && Game.Control.gameWindow != null)
             {
-                Game.control.gameWindow.Draw(this);
+                Game.Control.gameWindow.Draw(this);
             }
         }
     }

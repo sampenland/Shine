@@ -9,9 +9,15 @@ namespace Shine.Engine
         static Keyboard.Key endKey = Keyboard.Key.Escape;
         public bool Running = false;
         private Color backgroundColor = Color.Black;
+
+        public static int Width;
+        public static int Height;
         
         public Window(uint width, uint height, string name, Keyboard.Key quitKey = Keyboard.Key.Escape)
         {
+            Width = (int)width;
+            Height = (int)height;
+
             mainWindow = new RenderWindow(new SFML.Window.VideoMode(width, height), name);
             mainWindow.KeyPressed += WindowKeyPress;
             mainWindow.Closed += WindowClosed;
@@ -81,14 +87,14 @@ namespace Shine.Engine
 
         private void RenderCurrentScene()
         {
-            if (Game.control != null)
+            if (Game.Control != null)
             {
-                List<List<Sprite>> layers = Game.control.sceneManager.CurrentScene.GetDrawLayers();
+                List<List<Sprite>> layers = Game.Control.GetSceneManager().CurrentScene.GetDrawLayers();
                 for (int layer = 0; layer < layers.Count; layer++)
                 {
                     foreach (Sprite sprite in layers[layer])
                     {
-                        mainWindow.Draw(sprite.GetDrawable());
+                        if (mainWindow != null) mainWindow.Draw(sprite.GetDrawable());
                     }
                 }
             }

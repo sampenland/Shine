@@ -8,8 +8,9 @@ namespace CrossEngine.Shine.Scenes
         public Sandbox(string name) : base(name)
         {
             View mainView = new View(0, 0, 1280, 720);
+            mainView.Zoom(0.5f);
             View miniMap = new View(mainView, new XYf(0f, 0.75f), new XYf(0.25f, 0.25f));
-            miniMap.Zoom(0.5f);
+            miniMap.Zoom(1f);
 
             int[] tiles = {
                 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -42,12 +43,13 @@ namespace CrossEngine.Shine.Scenes
 
 
             Player player = new Player(2, "Assets/Mech_1.png", 32, 32);
-            //player.AddToView(miniMap);
+            player.AddToView(miniMap);
             player.AddToView(mainView);
 
             AddSprite(player, 0);
             player.SetWorldPosition(0, 0);
             mainView.CenterOn(player);
+            miniMap.CenterOn(player);
 
         }
     }

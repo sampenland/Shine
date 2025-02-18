@@ -102,11 +102,8 @@ namespace CrossEngine.Engine
             for (int i = 0; i < views.Count; i++)
             {
                 View view = views.ElementAt(i).Key;
-                if (Game.Control == null || Game.Control.gameWindow == null) throw new NullReferenceException();
-                Game.Control.gameWindow.SetView(view);
-                XYf pixelPos = Window.WorldToPixel(X, Y);
-                views[view].X = pixelPos.X;
-                views[view].Y = pixelPos.Y;
+                views[view].X = X;
+                views[view].Y = Y;
             }
         }
 

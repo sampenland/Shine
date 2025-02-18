@@ -26,7 +26,6 @@ namespace CrossEngine.Engine
             if (centerOn != null)
             {
                 XYf pos = centerOn.GetViews()[this];
-                Log.Write(pos.X);
                 Center = new SFML.System.Vector2f(pos.X, pos.Y);
             }
         }

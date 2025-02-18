@@ -41,12 +41,17 @@ namespace CrossEngine.Engine
 
         public List<List<Sprite>> GetDrawLayers()
         {
-            if (DrawPriorityLayers == null) throw new ArgumentNullException();
+            if (DrawPriorityLayers == null) throw new NullReferenceException();
             return DrawPriorityLayers;
         }
 
         public TileMap GetTilemap()
         {
+            if (tilemap == null)
+            {
+                throw new NullReferenceException();
+            }
+
             return tilemap;
         }
 
@@ -61,11 +66,14 @@ namespace CrossEngine.Engine
                 layer = DRAW_LAYERS - 1;
             }
 
+            if (DrawPriorityLayers == null) throw new NullReferenceException();
             DrawPriorityLayers[layer].Add(sprite);
         }
 
         protected void RemoveSprite(Sprite sprite)
         {
+            if (DrawPriorityLayers == null) throw new NullReferenceException();
+            
             int layerFnd = -1;
             for(int layer = 0; layer < DRAW_LAYERS; layer++)
             {
@@ -86,11 +94,28 @@ namespace CrossEngine.Engine
 
         public void Update()
         {
+            if (DrawPriorityLayers == null) throw new NullReferenceException();
+
             for (int layer = 0; layer < DRAW_LAYERS; layer++)
             {
                 foreach (Sprite sprite in DrawPriorityLayers[layer])
                 {
                     sprite.Update();
+                    if (sprite != null && sprite.GetDrawable() != null)
+                    {
+
+                        for (int i = 0; i < sprite.GetViews().Count; i++)
+                        {
+                            KeyValuePair<View, XYf> viewAndPos = sprite.GetViews().ElementAt(i);
+                            if (Game.Control == null || Game.Control.gameWindow == null)
+                            {
+                                throw new NullReferenceException();
+                            }
+
+                            Game.Control.gameWindow.SetView(viewAndPos.Key);
+                            viewAndPos.Key.Update();
+                        }
+                    }
                 }
             }
         }

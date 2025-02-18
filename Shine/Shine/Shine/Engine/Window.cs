@@ -33,33 +33,7 @@ namespace CrossEngine.Engine
             }
             else
             {
-                throw new ArgumentNullException();
-            }
-        }
-
-        public void Draw(Sprite sprite)
-        {
-            if(mainWindow == null)
-            {
-                Log.Error("Cannot draw window. Window is null");
-                throw new ArgumentNullException();
-            }
-
-            if (sprite != null && sprite.GetDrawable() != null)
-            {
-                
-                for(int i = 0; i < sprite.GetViews().Count; i++)
-                {
-                    KeyValuePair<View, XYf> viewAndPos = sprite.GetViews().ElementAt(i);
-                    if (Game.Control == null || Game.Control.gameWindow == null)
-                    {
-                        throw new ArgumentNullException();
-                    }
-
-                    Game.Control.gameWindow.SetView(viewAndPos.Key);
-                    sprite.SetRenderPosition(viewAndPos.Value.X, viewAndPos.Value.Y);
-                    mainWindow.Draw(sprite.GetDrawable());
-                }
+                throw new NullReferenceException();
             }
         }
 
@@ -93,7 +67,7 @@ namespace CrossEngine.Engine
             {
                 Log.Error("Cannot update main screen - is null");
                 Running = false;
-                throw new ArgumentNullException();
+                throw new NullReferenceException();
             }
 
             mainWindow.DispatchEvents();
@@ -114,7 +88,7 @@ namespace CrossEngine.Engine
         {
             if (Game.Control == null || mainWindow == null)
             {
-                throw new ArgumentNullException();
+                throw new NullReferenceException();
             }
 
             List<List<Sprite>> layers = Game.Control.GetSceneManager().CurrentScene.GetDrawLayers();
@@ -123,7 +97,28 @@ namespace CrossEngine.Engine
             {
                 foreach (Sprite sprite in layers[layer])
                 {
-                    mainWindow.Draw(sprite.GetDrawable());
+                    if (mainWindow == null)
+                    {
+                        Log.Error("Cannot draw window. Window is null");
+                        throw new NullReferenceException();
+                    }
+
+                    if (sprite != null && sprite.GetDrawable() != null)
+                    {
+
+                        for (int i = 0; i < sprite.GetViews().Count; i++)
+                        {
+                            KeyValuePair<View, XYf> viewAndPos = sprite.GetViews().ElementAt(i);
+                            if (Game.Control == null || Game.Control.gameWindow == null)
+                            {
+                                throw new NullReferenceException();
+                            }
+
+                            Game.Control.gameWindow.SetView(viewAndPos.Key);
+                            sprite.SetRenderPosition(viewAndPos.Value.X, viewAndPos.Value.Y);
+                            mainWindow.Draw(sprite.GetDrawable());
+                        }
+                    }
                 }
             }
         }
@@ -140,7 +135,7 @@ namespace CrossEngine.Engine
         {
             if (mainWindow == null)
             {
-                throw new ArgumentNullException();
+                throw new NullReferenceException();
             }
 
             SFML.System.Vector2f world = mainWindow.MapPixelToCoords(new SFML.System.Vector2i(x, y));
@@ -150,7 +145,7 @@ namespace CrossEngine.Engine
         {
             if (mainWindow == null)
             {
-                throw new ArgumentNullException();
+                throw new NullReferenceException();
             }
 
             SFML.System.Vector2i pixel = mainWindow.MapCoordsToPixel(new SFML.System.Vector2f(x, y));

@@ -24,6 +24,16 @@ namespace CrossEngine.Engine
             Print(text);
         }
 
+        public static void Write(int text)
+        {
+            Write("" + text);
+        }
+
+        public static void Write(float text)
+        {
+            Write("" + text);
+        }
+
         public static void Error(string errText)
         {
             Console.WriteLine(errText);

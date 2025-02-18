@@ -67,7 +67,7 @@ namespace CrossEngine.Engine
             if(Game.Control == null || Game.Control.gameWindow == null)
             {
                 Log.Error("Error drawing Tilemap. View may not be set.");
-                throw new ArgumentNullException();
+                throw new NullReferenceException();
             }
 
             foreach(View view in views)

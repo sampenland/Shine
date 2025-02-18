@@ -55,13 +55,15 @@ namespace CrossEngine.Engine
             {
                 Log.Error("Error creating sprite: " + textureAsset);
                 texture = null;
-                throw new ArgumentNullException();
+                throw new NullReferenceException();
             }
         }
 
         public void AddToView(View theView)
         {
             if (views.ContainsKey(theView)) return;
+            if (Game.Control == null || Game.Control.gameWindow == null) throw new NullReferenceException();
+            Game.Control.gameWindow.SetView(theView);
             views.Add(theView, Window.WorldToPixel(X, Y));
         }
 
@@ -91,21 +93,22 @@ namespace CrossEngine.Engine
 
         public SFML.Graphics.Sprite GetDrawable()
         {
-            if (sprite == null) throw new ArgumentNullException();
+            if (sprite == null) throw new NullReferenceException();
             return sprite;
         }
 
         public virtual void Update()
         {
-
-        }
-
-        public void Render()
-        {
-            if (Game.Control != null && Game.Control.gameWindow != null)
+            for (int i = 0; i < views.Count; i++)
             {
-                Game.Control.gameWindow.Draw(this);
+                View view = views.ElementAt(i).Key;
+                if (Game.Control == null || Game.Control.gameWindow == null) throw new NullReferenceException();
+                Game.Control.gameWindow.SetView(view);
+                XYf pixelPos = Window.WorldToPixel(X, Y);
+                views[view].X = pixelPos.X;
+                views[view].Y = pixelPos.Y;
             }
         }
+
     }
 }

@@ -1,4 +1,7 @@
-﻿namespace CrossEngine.Engine
+﻿using SFML.Window;
+using System.Reflection.Metadata.Ecma335;
+
+namespace CrossEngine.Engine
 {
     enum Keys
     {
@@ -10,13 +13,16 @@
         W,
         A,
         S,
-        D
+        D,
+
+        Tilde,
     }
 
     class InputHandler
     {
         public static InputHandler? Control;
         public static Dictionary<Keys, bool> ?PressedKeys;
+        public static Dictionary<Keys, bool> ?JustPressed;
 
         public InputHandler()
         {
@@ -26,7 +32,10 @@
             }
 
             PressedKeys = new Dictionary<Keys, bool>();
+            JustPressed = new Dictionary<Keys, bool>();
+
             PopulatePressedKeys();
+            PopulateJustPressed();
         }
 
         private void PopulatePressedKeys()
@@ -42,7 +51,29 @@
             PressedKeys.Add(Keys.A, false);
             PressedKeys.Add(Keys.S, false);
             PressedKeys.Add(Keys.D, false);
+        }
 
+        public void PopulateJustPressed()
+        {
+            if (JustPressed == null) return;
+
+            JustPressed.Add(Keys.Tilde, false);
+        }
+
+        public void ClearJustPressed()
+        {
+            JustPressed.Clear();
+            PopulateJustPressed();
+        }
+
+        public void KeyJustPressed(object? sender, KeyEventArgs e)
+        {
+            if (JustPressed == null) return;
+
+            if (e.Code == Keyboard.Key.Grave)
+            {
+                JustPressed[Keys.Tilde] = true;
+            }
         }
 
         public void Update()
@@ -58,6 +89,8 @@
             PressedKeys[Keys.A] = SFML.Window.Keyboard.IsKeyPressed(SFML.Window.Keyboard.Key.A);
             PressedKeys[Keys.S] = SFML.Window.Keyboard.IsKeyPressed(SFML.Window.Keyboard.Key.S);
             PressedKeys[Keys.D] = SFML.Window.Keyboard.IsKeyPressed(SFML.Window.Keyboard.Key.D);
+
+            // Just pressed
 
         }
 

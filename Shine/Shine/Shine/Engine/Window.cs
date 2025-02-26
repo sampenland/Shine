@@ -9,11 +9,11 @@ namespace CrossEngine.Engine
         static RenderWindow? mainWindow;
         static Keyboard.Key endKey = Keyboard.Key.Escape;
         public bool Running = false;
-        private Color backgroundColor = Color.Black;
+        private Color backgroundColor = Color.Blue;
 
         public static int Width;
         public static int Height;
-        
+
         public Window(uint width, uint height, string name, Keyboard.Key quitKey = Keyboard.Key.Escape)
         {
             Width = (int)width;
@@ -22,12 +22,13 @@ namespace CrossEngine.Engine
             mainWindow = new RenderWindow(new VideoMode(width, height), name);
             mainWindow.KeyPressed += WindowKeyPress;
             mainWindow.Closed += WindowClosed;
+            mainWindow.KeyReleased += WindowKeyReleased;
             endKey = quitKey;
         }
 
         public void SetView(View view)
         {
-            if(mainWindow != null)
+            if (mainWindow != null)
             {
                 mainWindow.SetView(view);
             }
@@ -55,10 +56,19 @@ namespace CrossEngine.Engine
             backgroundColor = background;
         }
 
-        public void WindowKeyPress(object ?sender, KeyEventArgs e)
+        public void WindowKeyPress(object? sender, KeyEventArgs e)
         {
-            if (e.Code == endKey) Running = false;
+            if (e.Code == endKey && endKey != Keyboard.Key.Backspace) Running = false;
         }
+
+        public void WindowKeyReleased(object? sender, KeyEventArgs e)
+        {
+            if (Game.Control != null && Game.Control.GetInputHandler() != null)
+            {
+                Game.Control.GetInputHandler().KeyJustPressed(sender, e);
+            }
+        }
+
         public void Update()
         {
             if (Running == false) return;
@@ -86,13 +96,18 @@ namespace CrossEngine.Engine
 
         private void RenderCurrentScene()
         {
-            if (Game.Control == null || mainWindow == null)
+            if (Game.Control == null || mainWindow == null || Game.Control.GetSceneManager().CurrentScene == null)
             {
                 throw new NullReferenceException();
             }
 
             List<List<Sprite>> layers = Game.Control.GetSceneManager().CurrentScene.GetDrawLayers();
-            mainWindow.Draw(Game.Control.GetSceneManager().CurrentScene.GetTilemap());
+            
+            if (Game.Control.GetSceneManager().CurrentScene.GetTilemap() != null)
+            {
+                mainWindow.Draw(Game.Control.GetSceneManager().CurrentScene.GetTilemap());
+            }
+
             for (int layer = 0; layer < layers.Count; layer++)
             {
                 foreach (Sprite sprite in layers[layer])
@@ -119,6 +134,17 @@ namespace CrossEngine.Engine
                             mainWindow.Draw(sprite.GetDrawable());
                         }
                     }
+                }
+            }
+
+            // Render any consols
+            if (Game.Control.GetSceneManager().CurrentScene.GetConsole() != null && Game.Control.GetSceneManager().CurrentScene.GetConsole().visible)
+            {
+                mainWindow.Draw(Game.Control.GetSceneManager().CurrentScene.GetConsole().GetBackground());
+                
+                foreach (Text text in Game.Control.GetSceneManager().CurrentScene.GetConsole().GetTexts())
+                {
+                    mainWindow.Draw(text);
                 }
             }
         }

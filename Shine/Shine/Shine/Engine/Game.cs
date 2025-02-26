@@ -76,6 +76,7 @@ namespace CrossEngine.Engine
 
                 // Update display
                 gameWindow.Render();
+                inputHandler.ClearJustPressed();
             }
 
             End();
@@ -89,6 +90,11 @@ namespace CrossEngine.Engine
         public SceneManager GetSceneManager()
         {
             return sceneManager;
+        }
+
+        public InputHandler GetInputHandler()
+        {
+            return inputHandler;
         }
 
     }

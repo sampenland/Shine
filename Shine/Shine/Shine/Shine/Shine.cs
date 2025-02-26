@@ -19,10 +19,12 @@ class ShineGame
             
             // Create all the possible scenes and add them to game
             Sandbox menu = new Sandbox("SandBox");
+            WorldMaker worldMaker = new WorldMaker();
             game.AddScene(menu);
+            game.AddScene(worldMaker);
 
             // Start the game
-            game.Start(menu);
+            game.Start(worldMaker);
         }
     }
 }

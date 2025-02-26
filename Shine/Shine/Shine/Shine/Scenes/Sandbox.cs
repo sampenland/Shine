@@ -7,6 +7,14 @@ namespace CrossEngine.Shine.Scenes
     {
         public Sandbox(string name) : base(name)
         {
+           
+
+        }
+
+        public override void Start()
+        {
+            base.Start();
+
             View mainView = new View(0, 0, 1280, 720);
             mainView.Zoom(0.5f);
             View miniMap = new View(mainView, new XYf(0f, 0.75f), new XYf(0.25f, 0.25f));
@@ -50,7 +58,6 @@ namespace CrossEngine.Shine.Scenes
             player.SetWorldPosition(0, 0);
             mainView.CenterOn(player);
             miniMap.CenterOn(player);
-
         }
     }
 }

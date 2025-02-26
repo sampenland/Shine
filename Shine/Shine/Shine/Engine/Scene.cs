@@ -15,6 +15,7 @@ namespace CrossEngine.Engine
         protected List<List<Sprite>> ?DrawPriorityLayers;
         private TileMap ?tilemap;
         protected List<View>? views;
+        private ConsoleDisplay inGameConsole;
 
         public Scene(string name)
         {
@@ -25,6 +26,30 @@ namespace CrossEngine.Engine
             {
                 DrawPriorityLayers.Add(new List<Sprite>());
             }
+
+            inGameConsole = new ConsoleDisplay(0, Window.Height - 100, Window.Width, 100);
+            LinkConsole(inGameConsole);
+            inGameConsole.Print("Cross Engine Started.");
+        }
+
+        virtual public void Start()
+        {
+
+        }
+
+        virtual public void End()
+        {
+
+        }
+
+        public void LinkConsole(ConsoleDisplay console)
+        {
+            inGameConsole = console;
+        }
+
+        public ConsoleDisplay GetConsole()
+        {
+            return inGameConsole;
         }
 
         public void SetTilemap(string asset, XYi tileSize, int[] tiles, int width, int height)
@@ -45,13 +70,8 @@ namespace CrossEngine.Engine
             return DrawPriorityLayers;
         }
 
-        public TileMap GetTilemap()
+        public TileMap ?GetTilemap()
         {
-            if (tilemap == null)
-            {
-                throw new NullReferenceException();
-            }
-
             return tilemap;
         }
 
@@ -95,6 +115,8 @@ namespace CrossEngine.Engine
         public void Update()
         {
             if (DrawPriorityLayers == null) throw new NullReferenceException();
+
+            if (inGameConsole != null) inGameConsole.Update();
 
             for (int layer = 0; layer < DRAW_LAYERS; layer++)
             {

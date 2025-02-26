@@ -18,7 +18,14 @@ namespace CrossEngine.Engine
 
         public void ChangeScene(Scene scene)
         {
+            if (CurrentScene != null)
+            {
+                CurrentScene.End();
+                Log.Print("Scene: " + CurrentScene.Name + " ended");
+            }
+
             CurrentScene = scene;
+            CurrentScene.Start();
             Log.Print("Started scene: " + scene.Name);
         }
 
